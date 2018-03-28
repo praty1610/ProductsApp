@@ -3,28 +3,26 @@ var webpack = require('webpack');
 var mongoose = require('mongoose');
 var path = require('path');
 var app = new express();
+var bodyParser = require('body-parser');
+var routes = require('./routes');
 var config = require('../webpack.config');
 
-app.use(express.static(path.normalize(__dirname+ '/../dist')));
+mongoose.connect('mongodb://127.0.0.1:27017/product_app');
 
-app.use(function(req, res) {
-    var compose = webpack(config);
-    compose.run(function(err, stat) {
-        if(stat)
-            res.sendFile(path.normalize(__dirname+'/../client/index.html'));
-    })
-});
 
-mongoose.connect('mongodb://127.0.0.1:27017/products_app', function(err, connected) {
-    if(connected) { 
-        //console.log('connected')
-    } else {
-        throw error;
-        
-    }
-});
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
-mongoose.Promise = global.Promise;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/api', routes);
+
+app.get('/' , function(req, res) {
+    res.sendFile(path.resolve(__dirname, '../client/index.html')) 
+})
+
+
+
 
 app.listen(8000, function(err, response) {
     if(err)

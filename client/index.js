@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app';
+import ClientRoutes from './routes';
+import { styles } from './app.css';
 
-ReactDOM.render(<App />, document.getElementById('target'));
+
+
+ReactDOM.render(<ClientRoutes />, document.getElementById('target'));
